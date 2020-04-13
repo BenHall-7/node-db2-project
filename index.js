@@ -25,8 +25,8 @@ server.get("/cars/:vin", (req, res) => {
 
 server.post("/cars", (req, res) => {
     db("cars").insert(req.body)
-        .then(res2 => {res.status(status.OK).json(res2);})
-        .catch(err => {res.status(status.INTERNAL_SERVER_ERROR).json(err); })
+        .then(res2 => { res.sendStatus(status.OK); })
+        .catch(err => { res.status(status.INTERNAL_SERVER_ERROR).json(err); })
 })
 
 server.listen(5000, () => {
