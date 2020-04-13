@@ -25,7 +25,33 @@ server.get("/cars/:vin", (req, res) => {
 
 server.post("/cars", (req, res) => {
     db("cars").insert(req.body)
-        .then(res2 => { res.sendStatus(status.OK); })
+        .then(res2 => { res.sendStatus(status.CREATED); })
+        .catch(err => { res.status(status.INTERNAL_SERVER_ERROR).json(err); })
+})
+
+server.delete("/cars/:vin", (req, res) => {
+    db("cars").where({vin: req.params.vin}).del()
+        .then(res2 => {
+            console.log(res2);
+            if (res2) {
+                res.sendStatus(status.OK);
+            } else {
+                res.status(status.NOT_FOUND).json({error: "Car not found"});
+            }
+        })
+        .catch(err => { res.status(status.INTERNAL_SERVER_ERROR).json(err); });
+})
+
+server.put("/cars/:vin", (req, res) => {
+    db("cars").where({vin: req.params.vin}).update(req.body)
+        .then(res2 => {
+            console.log(res2);
+            if (res2) {
+                res.sendStatus(status.OK);
+            } else {
+                res.status(status.NOT_FOUND).json({error: "Car not found"});
+            }
+        })
         .catch(err => { res.status(status.INTERNAL_SERVER_ERROR).json(err); })
 })
 
